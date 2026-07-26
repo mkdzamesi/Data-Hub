@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Terms & Privacy — Praise Data Hub</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #0B0E14;
+  --surface: #141924;
+  --surfaceHi: #1B2230;
+  --border: #252D3D;
+  --text: #F3F5F8;
+  --muted: #8B93A7;
+  --green: #3DDC97;
+  --gold: #F2B705;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+button, input, select, textarea { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+  outline: 2px solid var(--green); outline-offset: 2px;
+}
+@keyframes barPulse { 0%,100% { opacity:.5 } 50% { opacity:1 } }
+@keyframes slideUp { from { opacity:0; transform:translateY(12px);} to { opacity:1; transform:translateY(0);} }
+@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* Signal bars */
+.bars { display:flex; align-items:flex-end; gap:3px; }
+.bars .bar { width:4px; border-radius:2px; background: var(--border); transition: background .3s ease; }
+.bars.on .bar { background: var(--green); }
+.bars.animate .bar { animation: barPulse 1.1s ease-in-out infinite; }
+.bars .bar:nth-child(1){ animation-delay:0s }
+.bars .bar:nth-child(2){ animation-delay:.12s }
+.bars .bar:nth-child(3){ animation-delay:.24s }
+.bars .bar:nth-child(4){ animation-delay:.36s }
+
+/* Nav */
+nav.site-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 24px; border-bottom:1px solid var(--border);
+  position:sticky; top:0; background:rgba(11,14,20,0.92);
+  backdrop-filter: blur(8px); z-index:20; flex-wrap:wrap; gap:12px;
+}
+.brand { display:flex; align-items:center; gap:10px; }
+.brand span { font-family:'Sora',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em; }
+.nav-links { display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+.nav-links a { color: var(--muted); font-size:14px; font-weight:500; transition: color .15s ease; }
+.nav-links a:hover, .nav-links a.active { color: var(--text); }
+#cartBtn {
+  display:flex; align-items:center; gap:8px; background:var(--surfaceHi);
+  border:1px solid var(--border); color:var(--text); padding:8px 14px;
+  border-radius:10px; cursor:pointer; font-size:14px; font-weight:500;
+}
+#cartCount {
+  background:var(--green); color:#04140D; font-weight:700; font-size:12px;
+  border-radius:999px; width:18px; height:18px; display:none;
+  align-items:center; justify-content:center;
+}
+
+/* Generic page content */
+.page { max-width: 780px; margin: 0 auto; padding: 56px 24px 80px; }
+.page h1 { font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(28px,5vw,42px); letter-spacing:-0.02em; margin-bottom:18px; }
+.page h2 { font-family:'Sora',sans-serif; font-weight:700; font-size:22px; margin: 32px 0 12px; }
+.page p { color: var(--muted); line-height:1.7; margin-bottom:14px; font-size:15px; }
+.page ul { color: var(--muted); line-height:1.8; margin: 0 0 14px 20px; font-size:15px; }
+.page a.inline-link { color: var(--green); text-decoration:underline; }
+
+/* Hero (home) */
+header.hero { padding:72px 24px 56px; max-width:1100px; margin:0 auto; text-align:center; }
+.hero-bars { display:flex; justify-content:center; margin-bottom:20px; }
+h1.hero-title {
+  font-family:'Sora',sans-serif; font-weight:800; font-size:clamp(32px,6vw,56px);
+  line-height:1.05; letter-spacing:-0.03em; margin-bottom:16px;
+}
+h1.hero-title .accent { color: var(--green); }
+.hero p { color:var(--muted); font-size:17px; max-width:480px; margin:0 auto 32px; line-height:1.5; }
+.network-tabs { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.net-btn {
+  display:flex; align-items:center; gap:8px; padding:10px 18px; border-radius:999px;
+  border:1px solid var(--border); background:transparent; color:var(--muted);
+  font-weight:600; font-size:14px; cursor:pointer; transition:all .15s ease;
+}
+.net-btn .dot { width:8px; height:8px; border-radius:50%; }
+
+main.store { max-width:1100px; margin:0 auto; padding:0 24px 80px; }
+.section-title { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+.section-title .dot { width:10px; height:10px; border-radius:50%; }
+.section-title h2 { font-family:'Sora',sans-serif; font-size:20px; font-weight:700; }
+
+.grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:14px; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:14px; animation:slideUp .4s ease; }
+.card-top { display:flex; justify-content:space-between; align-items:flex-start; }
+.gb { font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:600; line-height:1; }
+.gb span { font-size:16px; color:var(--muted); margin-left:3px; }
+.validity { color:var(--muted); font-size:13px; margin-top:6px; display:flex; align-items:center; gap:5px; }
+.icon-chip { padding:6px; border-radius:8px; display:flex; }
+.price { font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:600; color:var(--gold); }
+.add-btn { background:transparent; border:1px solid var(--green); color:var(--green); padding:9px 12px; border-radius:10px; font-weight:600; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all .15s ease; }
+.add-btn:hover { background:var(--green); color:#04140D; }
+
+footer.site-footer { border-top:1px solid var(--border); padding:32px 24px; color:var(--muted); font-size:13px; }
+.footer-inner { max-width:1100px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+.footer-links { display:flex; gap:18px; flex-wrap:wrap; }
+.footer-links a { color: var(--muted); }
+.footer-links a:hover { color: var(--text); }
+
+/* Overlays / cart / checkout (shared with storefront) */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:30; display:none; animation:fadeIn .2s ease; }
+.overlay.show { display:flex; }
+#cartOverlay { justify-content:flex-end; }
+.drawer { width:min(380px,100%); background:var(--surface); height:100%; padding:24px; display:flex; flex-direction:column; border-left:1px solid var(--border); }
+.drawer-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.drawer-head h3 { font-family:'Sora',sans-serif; font-size:18px; }
+.icon-btn { background:none; border:none; color:var(--muted); cursor:pointer; display:flex; }
+.empty-msg { color:var(--muted); font-size:14px; }
+#cartItems { display:flex; flex-direction:column; gap:10px; overflow-y:auto; flex:1; }
+.cart-item { display:flex; justify-content:space-between; align-items:center; background:var(--surfaceHi); border:1px solid var(--border); border-radius:10px; padding:10px 12px; }
+.cart-item .name { font-size:14px; font-weight:600; }
+.cart-item .sub { font-size:12px; color:var(--muted); }
+.cart-footer { border-top:1px solid var(--border); padding-top:16px; margin-top:16px; }
+.total-row { display:flex; justify-content:space-between; margin-bottom:14px; font-size:15px; }
+.total-row .label { color:var(--muted); }
+.total-row .amt { font-family:'JetBrains Mono',monospace; font-weight:600; color:var(--gold); }
+.primary-btn { width:100%; background:var(--green); color:#04140D; border:none; padding:12px; border-radius:10px; font-weight:700; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
+.secondary-btn { width:100%; background:var(--surfaceHi); border:1px solid var(--border); color:var(--text); padding:11px; border-radius:10px; font-weight:600; font-size:14px; cursor:pointer; }
+
+#checkoutOverlay { align-items:center; justify-content:center; padding:20px; }
+.modal { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:28px; width:min(420px,100%); animation:slideUp .3s ease; }
+.modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.modal-head h3 { font-family:'Sora',sans-serif; font-size:18px; }
+.field { display:flex; flex-direction:column; gap:14px; }
+.field label { font-size:13px; color:var(--muted); display:block; margin-bottom:6px; }
+select, input[type=tel], input[type=text], input[type=password], input[type=email], input[type=number], textarea {
+  width:100%; background:var(--surfaceHi); border:1px solid var(--border); color:var(--text);
+  padding:10px 12px; border-radius:10px; font-size:14px;
+}
+.input-wrap { position:relative; }
+.input-wrap svg { position:absolute; left:12px; top:12px; }
+.input-wrap input { padding-left:36px; }
+.amount-row { display:flex; justify-content:space-between; font-size:14px; padding:12px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.disclaimer { font-size:11.5px; color:var(--muted); text-align:center; }
+.processing { text-align:center; padding:20px 0; }
+.processing .hero-bars { margin-bottom:18px; }
+.processing p { font-size:14px; color:var(--muted); }
+.processing p.small { font-size:12px; margin-top:6px; }
+.success { text-align:center; padding:10px 0; }
+.check-circle { width:56px; height:56px; border-radius:50%; background:rgba(61,220,151,0.13); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+.success h3 { font-family:'Sora',sans-serif; font-size:18px; margin-bottom:6px; }
+.success p { color:var(--muted); font-size:13px; margin-bottom:16px; }
+.hidden { display:none !important; }
+
+/* WhatsApp floating button */
+.whatsapp-fab {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  z-index: 50;
+  transition: transform 0.15s ease;
+}
+.whatsapp-fab:hover { transform: scale(1.08); }
+.whatsapp-fab svg { width: 30px; height: 30px; }
+@media (max-width: 480px) {
+  .whatsapp-fab { bottom: 16px; right: 16px; width: 52px; height: 52px; }
+}
+.contact-form { display:flex; flex-direction:column; gap:14px; margin-top:24px; }
+.faq-item { border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin-bottom:10px; background: var(--surface); }
+.faq-item summary { cursor:pointer; font-weight:600; font-size:15px; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+.faq-item summary::-webkit-details-marker { display:none; }
+.faq-item p { margin-top:10px; margin-bottom:0; }
+
+/* Admin */
+.admin-wrap { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
+.admin-login { max-width: 340px; margin: 100px auto; text-align:center; }
+.admin-table { width:100%; border-collapse: collapse; margin-top: 16px; }
+.admin-table th, .admin-table td { text-align:left; padding: 10px 8px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.admin-table th { color: var(--muted); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:0.04em; }
+.admin-table input { padding: 6px 8px; font-size: 13px; width: 90px; }
+.tag { display:inline-block; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:700; }
+.save-bar { display:flex; justify-content:space-between; align-items:center; margin-top:24px; gap:12px; flex-wrap:wrap; }
+.status-msg { font-size:13px; color: var(--green); }
+
+</style>
+</head>
+<body>
+<nav class="site-nav" id="siteNav"></nav>
+
+<div class="page">
+  <h1>Terms of service & privacy</h1>
+  <p><em>This is a starting template — please have it reviewed by a lawyer or consultant familiar with Ghanaian e-commerce and data protection law before publishing.</em></p>
+
+  <h2>1. About Praise Data Hub</h2>
+  <p>Praise Data Hub is an online reseller of mobile data bundles for MTN, Telecel, and AirtelTigo networks in Ghana. We are an independent platform and are not owned by or officially affiliated with any of these network operators.</p>
+
+  <h2>2. Orders and payment</h2>
+  <p>All bundle purchases are paid for in advance via Mobile Money. Prices are shown in Ghanaian Cedis (GH₵) and may change without prior notice. Once a payment is confirmed, the corresponding data bundle will be credited to the phone number provided at checkout.</p>
+
+  <h2>3. Delivery</h2>
+  <p>Bundles are typically delivered within minutes of a successful payment. Delays may occasionally occur due to network operator issues outside our control. If a bundle is not delivered within a reasonable time, contact support with your payment reference.</p>
+
+  <h2>4. Refunds</h2>
+  <p>If we are unable to deliver a paid-for bundle, a refund will be issued to the Mobile Money account used for payment, typically within a few business days.</p>
+
+  <h2>5. Data protection</h2>
+  <p>We collect the phone number, email address, and payment reference needed to process and deliver your order. We do not sell customer information to third parties. Payment details are processed securely by our payment provider and are not stored on our servers.</p>
+
+  <h2>6. Limitation of liability</h2>
+  <p>Praise Data Hub is not liable for network outages, service interruptions, or delays caused by the mobile network operators themselves.</p>
+
+  <h2>7. Contact</h2>
+  <p>Questions about these terms can be sent to our <a class="inline-link" href="contact.html">contact page</a>.</p>
+</div>
+
+<footer class="site-footer" id="siteFooter"></footer>
+
+<script>
+// ---- Site-wide configuration ----
+// Paste your real Paystack PUBLIC key below to enable live Mobile Money payments.
+// Get it from: https://dashboard.paystack.com/#/settings/developer
+// Leave as "" to keep the site in demo/simulation mode.
+const CONFIG = {
+  PAYSTACK_PUBLIC_KEY: "pk_live_8ef88c6f1953b700d7a0b733b8741271a0c24b83", // e.g. "pk_live_xxxxxxxxxxxxxxxxxxxxxxxxx"
+  SUPPORT_EMAIL: "support@praisedatahub.com",
+  SUPPORT_PHONE: "0549560508",
+};
+
+const NETWORKS = {
+  mtn: { name: "MTN", color: "#FFCC00", text: "#1a1a1a" },
+  telecel: { name: "Telecel", color: "#E4032E", text: "#ffffff" },
+  airteltigo: { name: "AirtelTigo", color: "#0057B8", text: "#ffffff" },
+};
+
+// Default catalog. The admin page can override these values (saved to
+// localStorage on the deployed site) without touching this file.
+const DEFAULT_BUNDLES = {
+  mtn: [
+    { id: "m1", gb: 1, price: 6, validity: "120 days" },
+    { id: "m2", gb: 2.5, price: 12, validity: "120 days" },
+    { id: "m3", gb: 5, price: 22, validity: "120 days" },
+    { id: "m4", gb: 10, price: 40, validity: "120 days" },
+    { id: "m5", gb: 20, price: 75, validity: "120 days" },
+    { id: "m6", gb: 50, price: 170, validity: "120 days" },
+  ],
+  telecel: [
+    { id: "t1", gb: 1, price: 6, validity: "120 days" },
+    { id: "t2", gb: 3, price: 15, validity: "120 days" },
+    { id: "t3", gb: 6, price: 25, validity: "120 days" },
+    { id: "t4", gb: 12, price: 45, validity: "120 days" },
+    { id: "t5", gb: 25, price: 80, validity: "120 days" },
+    { id: "t6", gb: 60, price: 180, validity: "120 days" },
+  ],
+  airteltigo: [
+    { id: "a1", gb: 1.5, price: 6, validity: "120 days" },
+    { id: "a2", gb: 3, price: 13, validity: "120 days" },
+    { id: "a3", gb: 7, price: 24, validity: "120 days" },
+    { id: "a4", gb: 15, price: 42, validity: "120 days" },
+    { id: "a5", gb: 30, price: 78, validity: "120 days" },
+    { id: "a6", gb: 75, price: 175, validity: "120 days" },
+  ],
+};
+
+const STORAGE_KEY = "pdh_bundle_overrides_v1";
+const ORDERS_KEY = "pdh_local_orders_v1";
+
+// Merge any admin-saved overrides on top of the defaults.
+function getBundles() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return DEFAULT_BUNDLES;
+    const overrides = JSON.parse(raw);
+    const merged = {};
+    Object.keys(DEFAULT_BUNDLES).forEach((net) => {
+      merged[net] = DEFAULT_BUNDLES[net].map((b) => {
+        const o = overrides[net] && overrides[net].find((x) => x.id === b.id);
+        return o ? { ...b, ...o } : b;
+      });
+    });
+    return merged;
+  } catch (e) {
+    return DEFAULT_BUNDLES;
+  }
+}
+
+function saveBundles(bundles) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(bundles));
+}
+
+function logLocalOrder(order) {
+  try {
+    const raw = localStorage.getItem(ORDERS_KEY);
+    const orders = raw ? JSON.parse(raw) : [];
+    orders.unshift(order);
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders.slice(0, 200)));
+  } catch (e) {}
+}
+
+function getLocalOrders() {
+  try {
+    const raw = localStorage.getItem(ORDERS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+</script>
+<script>
+function renderNav(activePage) {
+  const navHtml = `
+    <div class="brand">
+      <a href="index.html" style="display:flex;align-items:center;gap:10px;">
+        <div class="bars on" style="height:20px"><div class="bar" style="height:35%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:75%"></div><div class="bar" style="height:100%"></div></div>
+        <span>Praise Data Hub</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="${activePage === 'home' ? 'active' : ''}">Bundles</a>
+      <a href="about.html" class="${activePage === 'about' ? 'active' : ''}">About</a>
+      <a href="faq.html" class="${activePage === 'faq' ? 'active' : ''}">FAQ</a>
+      <a href="contact.html" class="${activePage === 'contact' ? 'active' : ''}">Contact</a>
+      <a href="terms.html" class="${activePage === 'terms' ? 'active' : ''}">Terms</a>
+    </div>
+    <button id="cartBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span id="cartCount">0</span>
+    </button>
+  `;
+  const nav = document.getElementById("siteNav");
+  if (nav) nav.innerHTML = navHtml;
+
+  const footerHtml = `
+    <div class="footer-inner">
+      <span>&copy; ${new Date().getFullYear()} Praise Data Hub. Accra, Ghana.</span>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQ</a>
+        <a href="contact.html">Contact</a>
+        <a href="terms.html">Terms &amp; Privacy</a>
+        <a href="admin.html">Admin</a>
+      </div>
+    </div>
+  `;
+  const footer = document.getElementById("siteFooter");
+  if (footer) footer.innerHTML = footerHtml;
+
+  if (typeof initCartUI === "function") initCartUI();
+  renderWhatsAppFab();
+}
+
+function renderWhatsAppFab() {
+  if (document.querySelector(".whatsapp-fab")) return; // avoid duplicates
+  const rawPhone = (typeof CONFIG !== "undefined" && CONFIG.SUPPORT_PHONE) || "";
+  let digits = rawPhone.replace(/\D/g, "");
+  if (digits.startsWith("0")) digits = "233" + digits.slice(1); // 024... -> 23324...
+  const message = encodeURIComponent("Hi Praise Data Hub, I need help with an order.");
+  const link = document.createElement("a");
+  link.href = `https://wa.me/${digits}?text=${message}`;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.className = "whatsapp-fab";
+  link.setAttribute("aria-label", "Chat with us on WhatsApp");
+  link.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="white"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.82L2 22l5.4-1.42a9.9 9.9 0 0 0 4.64 1.18h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m0 1.67c2.2 0 4.27.86 5.82 2.42a8.2 8.2 0 0 1 2.42 5.82c0 4.54-3.7 8.24-8.25 8.24a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.25-4.38c0-4.55 3.7-8.24 8.24-8.24M8.53 6.98c-.16 0-.43.06-.66.31s-.87.86-.87 2.1.9 2.42 1.02 2.6c.12.16 1.75 2.79 4.32 3.82 2.14.86 2.57.69 3.04.65.46-.04 1.5-.61 1.71-1.2s.21-1.1.15-1.2c-.06-.1-.23-.16-.48-.28s-1.5-.74-1.73-.82c-.23-.08-.4-.12-.57.13s-.65.82-.8.98c-.15.17-.3.19-.55.06-.26-.12-1.08-.4-2.05-1.27-.76-.68-1.27-1.51-1.42-1.77-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.12-.14.16-.25.24-.41.08-.17.04-.31-.02-.44-.06-.12-.57-1.4-.79-1.91-.2-.5-.42-.43-.57-.43z"/></svg>
+  `;
+  document.body.appendChild(link);
+}
+
+</script>
+<script>
+const CART_KEY = "pdh_cart_v1";
+
+function getCart() {
+  try {
+    const raw = localStorage.getItem(CART_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+function setCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateCartBadge();
+}
+function updateCartBadge() {
+  const el = document.getElementById("cartCount");
+  if (!el) return;
+  const count = getCart().length;
+  el.textContent = count;
+  el.style.display = count > 0 ? "flex" : "none";
+}
+
+// Called by nav.js after the nav bar is injected on every page.
+function initCartUI() {
+  updateCartBadge();
+  const btn = document.getElementById("cartBtn");
+  if (!btn) return;
+  btn.onclick = () => {
+    if (document.getElementById("cartOverlay")) {
+      openCart();
+    } else {
+      window.location.href = "index.html?cart=1";
+    }
+  };
+}
+
+// ---------------- Storefront (index.html only) ----------------
+let currentNetwork = "mtn";
+
+function initStorefront() {
+  const networkTabs = document.getElementById("networkTabs");
+  if (!networkTabs) return; // not on the home page
+
+  const BUNDLES = getBundles();
+  const bundleGrid = document.getElementById("bundleGrid");
+  const sectionTitle = document.getElementById("sectionTitle");
+  const sectionDot = document.getElementById("sectionDot");
+
+  function renderNetworkTabs() {
+    networkTabs.innerHTML = "";
+    Object.entries(NETWORKS).forEach(([key, n]) => {
+      const btn = document.createElement("button");
+      btn.className = "net-btn";
+      if (currentNetwork === key) {
+        btn.style.background = n.color;
+        btn.style.color = n.text;
+        btn.style.borderColor = n.color;
+      }
+      btn.innerHTML = `<span class="dot" style="background:${currentNetwork === key ? n.text : n.color}"></span>${n.name}`;
+      btn.onclick = () => { currentNetwork = key; renderNetworkTabs(); renderBundles(); };
+      networkTabs.appendChild(btn);
+    });
+  }
+
+  function renderBundles() {
+    const n = NETWORKS[currentNetwork];
+    sectionTitle.textContent = n.name + " bundles";
+    sectionDot.style.background = n.color;
+    bundleGrid.innerHTML = "";
+    BUNDLES[currentNetwork].forEach((b) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="card-top">
+          <div>
+            <div class="gb">${b.gb}<span>GB</span></div>
+            <div class="validity">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Valid ${b.validity}
+            </div>
+          </div>
+          <div class="icon-chip" style="background:${n.color}22">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${n.color}" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          </div>
+        </div>
+        <div class="price">GH₵ ${b.price.toFixed(2)}</div>
+        <button class="add-btn">Add to cart</button>
+      `;
+      card.querySelector(".add-btn").onclick = () => addToCart(b);
+      bundleGrid.appendChild(card);
+    });
+  }
+
+  function addToCart(bundle) {
+    const cart = getCart();
+    cart.push({ ...bundle, network: currentNetwork, cartId: bundle.id + "-" + Date.now() });
+    setCart(cart);
+    renderCart();
+    openCart();
+  }
+
+  window.renderBundles = renderBundles;
+  renderNetworkTabs();
+  renderBundles();
+  renderCart();
+
+  if (new URLSearchParams(window.location.search).get("cart") === "1") {
+    openCart();
+  }
+}
+
+// ---------------- Cart drawer ----------------
+function renderCart() {
+  const cartItemsEl = document.getElementById("cartItems");
+  if (!cartItemsEl) return;
+  const emptyMsg = document.getElementById("emptyMsg");
+  const cartFooter = document.getElementById("cartFooter");
+  const cartTotalEl = document.getElementById("cartTotal");
+  const modalTotalEl = document.getElementById("modalTotal");
+  const cart = getCart();
+
+  cartItemsEl.innerHTML = "";
+  if (cart.length === 0) {
+    emptyMsg.classList.remove("hidden");
+    cartFooter.classList.add("hidden");
+  } else {
+    emptyMsg.classList.add("hidden");
+    cartFooter.classList.remove("hidden");
+    cart.forEach((c) => {
+      const item = document.createElement("div");
+      item.className = "cart-item";
+      item.innerHTML = `
+        <div>
+          <div class="name">${NETWORKS[c.network].name} · ${c.gb}GB</div>
+          <div class="sub">GH₵ ${c.price.toFixed(2)}</div>
+        </div>
+        <button class="icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      `;
+      item.querySelector("button").onclick = () => {
+        setCart(getCart().filter((x) => x.cartId !== c.cartId));
+        renderCart();
+      };
+      cartItemsEl.appendChild(item);
+    });
+    const total = cart.reduce((s, c) => s + c.price, 0).toFixed(2);
+    if (cartTotalEl) cartTotalEl.textContent = "GH₵ " + total;
+    if (modalTotalEl) modalTotalEl.textContent = "GH₵ " + total;
+  }
+  updateCartBadge();
+}
+
+function openCart() {
+  const el = document.getElementById("cartOverlay");
+  if (el) { renderCart(); el.classList.add("show"); }
+}
+function closeCartFn() {
+  const el = document.getElementById("cartOverlay");
+  if (el) el.classList.remove("show");
+}
+function openCheckout() {
+  const formStep = document.getElementById("formStep");
+  const processingStep = document.getElementById("processingStep");
+  const successStep = document.getElementById("successStep");
+  formStep.classList.remove("hidden");
+  processingStep.classList.add("hidden");
+  successStep.classList.add("hidden");
+  document.getElementById("checkoutOverlay").classList.add("show");
+}
+function closeCheckoutFn() {
+  document.getElementById("checkoutOverlay").classList.remove("show");
+}
+
+function initCheckoutWiring() {
+  const closeCart = document.getElementById("closeCart");
+  const cartOverlay = document.getElementById("cartOverlay");
+  const checkoutBtn = document.getElementById("checkoutBtn");
+  const closeCheckout = document.getElementById("closeCheckout");
+  const payForm = document.getElementById("payForm");
+  const doneBtn = document.getElementById("doneBtn");
+  if (!cartOverlay) return;
+
+  const note = document.getElementById("checkoutNote");
+  if (note) {
+    note.textContent = CONFIG.PAYSTACK_PUBLIC_KEY
+      ? "Secured by Paystack. Your card/Mobile Money details are never seen by this site."
+      : "Demo checkout — no real charge is made until a Paystack key is added (see assets/data.js).";
+  }
+
+  closeCart.onclick = closeCartFn;
+  cartOverlay.onclick = (e) => { if (e.target === cartOverlay) closeCartFn(); };
+  checkoutBtn.onclick = () => { closeCartFn(); openCheckout(); };
+  closeCheckout.onclick = closeCheckoutFn;
+
+  payForm.onsubmit = (e) => {
+    e.preventDefault();
+    const phone = document.getElementById("phoneInput").value;
+    const email = document.getElementById("emailInput").value;
+    const momo = document.getElementById("momoSelect").value;
+    const cart = getCart();
+    if (!phone || !email || cart.length === 0) return;
+    const total = cart.reduce((s, c) => s + c.price, 0);
+
+    if (CONFIG.PAYSTACK_PUBLIC_KEY) {
+      payWithPaystack({ email, phone, momo, total, cart });
+    } else {
+      simulatePayment({ email, phone, momo, total, cart });
+    }
+  };
+
+  doneBtn.onclick = () => {
+    setCart([]);
+    document.getElementById("phoneInput").value = "";
+    document.getElementById("emailInput").value = "";
+    renderCart();
+    closeCheckoutFn();
+  };
+}
+
+function simulatePayment({ email, phone, momo, total, cart }) {
+  document.getElementById("formStep").classList.add("hidden");
+  document.getElementById("processingStep").classList.remove("hidden");
+  document.getElementById("processingText").textContent = "Waiting for approval on " + momo + "… (demo mode)";
+  setTimeout(() => {
+    const ref = "PDH" + Math.random().toString(36).slice(2, 8).toUpperCase();
+    finishOrder({ email, phone, momo, total, cart, ref, real: false });
+  }, 2200);
+}
+
+function payWithPaystack({ email, phone, momo, total, cart }) {
+  document.getElementById("formStep").classList.add("hidden");
+  document.getElementById("processingStep").classList.remove("hidden");
+  document.getElementById("processingText").textContent = "Opening Paystack Mobile Money checkout…";
+
+  const handler = PaystackPop.setup({
+    key: CONFIG.PAYSTACK_PUBLIC_KEY,
+    email: email,
+    amount: Math.round(total * 100), // pesewas
+    currency: "GHS",
+    channels: ["mobile_money"],
+    ref: "PDH" + Math.random().toString(36).slice(2, 10).toUpperCase(),
+    metadata: {
+      phone,
+      momo,
+      bundles: cart.map((c) => `${NETWORKS[c.network].name} ${c.gb}GB`).join(", "),
+      items: JSON.stringify(cart.map((c) => ({ network: c.network, gb: c.gb, price: c.price }))),
+    },
+    callback: function (response) {
+      finishOrder({ email, phone, momo, total, cart, ref: response.reference, real: true });
+    },
+    onClose: function () {
+      openCheckout(); // back to form if they cancel
+    },
+  });
+  handler.openIframe();
+}
+
+function finishOrder({ email, phone, momo, total, cart, ref, real }) {
+  logLocalOrder({
+    ref, email, phone, momo, total,
+    items: cart.map((c) => `${NETWORKS[c.network].name} ${c.gb}GB`),
+    real,
+    time: new Date().toISOString(),
+    fulfilled: false,
+  });
+  document.getElementById("processingStep").classList.add("hidden");
+  document.getElementById("successStep").classList.remove("hidden");
+  document.getElementById("successDetail").textContent =
+    (real ? "Payment received. " : "") + "Sent to " + phone + " · Ref " + ref;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initStorefront();
+  initCheckoutWiring();
+});
+
+</script>
+<script>renderNav('terms');</script>
+</body>
+</html>
